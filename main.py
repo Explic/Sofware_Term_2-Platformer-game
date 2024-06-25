@@ -171,6 +171,8 @@ while running:
         direction = 'R'
     if keys[pygame.K_SPACE] and not is_jumping:
         is_jumping = True
+        for i in range(10):
+            particles.append(Particle(player_x, player_y, (100, 100, 100), 20, random.randint(1, 4), random.randint(-5, 5), random.uniform(-5, 0)))
         airdash = True
         player_y_velocity = jump_height
     if keys[pygame.K_ESCAPE]:
@@ -187,12 +189,12 @@ while running:
         if dash == True:
             if direction == 'R':
                 player_velocity = player_velocity + 30
-                for i in range(50):
-                    particles.append(Particle(player_x, player_y + random.uniform(-12, 12) + 12, LIGHT_BLUE, 10, random.randint(1, 4), random.randint(2, 16), random.uniform(-5, 5)))
+                for i in range(10):
+                    particles.append(Particle(player_x, player_y + random.uniform(-12, 12) + 12, LIGHT_BLUE, 20, random.randint(1, 4), random.randint(10, 16), random.uniform(-1, 1)))
             if direction == 'L':
                 player_velocity = player_velocity - 30 
-                for i in range(50):
-                    particles.append(Particle(player_x, player_y + random.uniform(-12, 12) + 12, LIGHT_BLUE, 10, random.randint(1, 4), random.randint(-16, -2), random.uniform(-5, 5)))
+                for i in range(10):
+                    particles.append(Particle(player_x, player_y + random.uniform(-12, 12) + 12, LIGHT_BLUE, 20, random.randint(1, 4), random.randint(-16, -10), random.uniform(-1, 1)))
             dash = False
             cooldown = True
             timer = 20
@@ -251,18 +253,18 @@ while running:
 
     # Screen update
     screen.fill((0, 0, 0))
-    
-    # Draw the player
-    if airdash:
-        pygame.draw.rect(screen, player_colour, (player_x, player_y, *player_size))
-    else:
-        pygame.draw.rect(screen, LIGHT_BLUE, (player_x, player_y, *player_size))
-          
+       
     for particle in particles[:]:
         particle.update()
         particle.draw(screen)
         if particle.lifespan <= 0:
             particles.remove(particle)
+            
+    # Draw the player
+    if airdash:
+        pygame.draw.rect(screen, player_colour, (player_x, player_y, *player_size))
+    else:
+        pygame.draw.rect(screen, LIGHT_BLUE, (player_x, player_y, *player_size))
 
     # Update and draw obstacles
     for obstacle in obstacles[:]:
